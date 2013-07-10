@@ -58,6 +58,13 @@ public class BankView extends Application{
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Opening ATM details window -> Adding an ATM");
+                ATMDetails newATMForm = new ATMDetails();
+                try {
+					runAnotherApp(ATMDetails.class);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
         Button addBankerBtn = new Button();
@@ -66,6 +73,12 @@ public class BankView extends Application{
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Opening banker details window -> Adding a Banker");
+                try {
+					runAnotherApp(BankerDetails.class);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
         Button addClientBtn = new Button();
@@ -74,6 +87,12 @@ public class BankView extends Application{
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Opening client details window -> Adding a Client");
+                try {
+ 					runAnotherApp(ClientDetails.class);
+ 				} catch (Exception e) {
+ 					// TODO Auto-generated catch block
+ 					e.printStackTrace();
+ 				}
             }
         });
 		
@@ -101,6 +120,11 @@ public class BankView extends Application{
         primaryStage.show();
 		
 	}
+	public void runAnotherApp(Class<? extends Application> anotherAppClass) throws Exception {
+        Application app2 = anotherAppClass.newInstance(); 
+        Stage anotherStage = new Stage();
+        app2.start(anotherStage);
+    }
 	public static void main(String[] args) {
 
 		launch(args);
