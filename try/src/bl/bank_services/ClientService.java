@@ -1,10 +1,11 @@
-package bank_services;
+package bl.bank_services;
 
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
-import main.Client;
-import main.Log;
-import main.NumberSelector;
+
+import bl.main.Client;
+import bl.main.Log;
+import bl.main.NumberSelector;
 
 
 public class ClientService extends Thread implements ServiceActions {

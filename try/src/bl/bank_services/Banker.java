@@ -1,4 +1,4 @@
-package bank_services;
+package bl.bank_services;
 
 import java.io.IOException;
 
@@ -13,9 +13,10 @@ public class Banker extends ClientService implements ServiceActions {
 	double commission;
 
 	//Constructor
-	public Banker(int id, String name) throws SecurityException, IOException{
+	public Banker(int id, String name, double commission) throws SecurityException, IOException{
 		super(id);
 		setName(name);
+		this.commission = commission;
 	}
 
 	@Override
@@ -78,7 +79,7 @@ public class Banker extends ClientService implements ServiceActions {
 		String name = bankerElement.getAttribute("name");
 		int id = Integer.parseInt(bankerElement.getAttribute("id"));
 		
-		return new Banker(id, name);
+		return new Banker(id, name, 0);
 	}
 	
 	

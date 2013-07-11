@@ -1,10 +1,11 @@
-package bank_services;
+package bl.bank_services;
 
 import java.io.IOException;
 
 import org.w3c.dom.Element;
-import main.BankManager;
-import main.XmlHandler;
+
+import bl.main.BankManager;
+import bl.main.XmlHandler;
 
 
 public class Atm extends ClientService implements ServiceActions  {

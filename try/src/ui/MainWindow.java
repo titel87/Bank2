@@ -1,4 +1,6 @@
-package gui;
+package ui;
+
+import java.util.Vector;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -12,9 +14,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import listeners.BLEventsListener;
+import listeners.UIEventsListener;
 
-public class MainWindow extends Application {
-
+public class MainWindow extends Application implements ApplicationBase{
+	
+	private Vector<UIEventsListener> listeners;	
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
@@ -90,5 +96,29 @@ public class MainWindow extends Application {
 	public static void main(String[] args) {
         launch(args);
     }
+
+	@Override
+	public void addCustomerToUI(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addATMToUI(String location) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addBankerToUI(String name, double commission) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registerListener(UIEventsListener listener) {
+		listeners.add(listener);
+		
+	}
 
 }

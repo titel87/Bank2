@@ -1,14 +1,15 @@
-package main;
+package bl.main;
 
 import java.io.IOException;
 import java.util.Vector;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import bank_services.Atm;
-import bank_services.Banker;
-import bank_services.ClientService;
-import bank_services.ServiceActions;
+
+import bl.bank_services.Atm;
+import bl.bank_services.Banker;
+import bl.bank_services.ClientService;
+import bl.bank_services.ServiceActions;
 
 
 public class Client extends Thread implements ServiceActions{

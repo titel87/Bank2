@@ -1,4 +1,4 @@
-package main;
+package bl.main;
 
 import java.io.IOException;
 

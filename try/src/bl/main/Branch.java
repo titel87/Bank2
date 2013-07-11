@@ -1,4 +1,4 @@
-package main;
+package bl.main;
 
 
 import java.io.IOException;
@@ -8,8 +8,8 @@ import org.w3c.dom.Node;
 
 
 
-import bank_services.Banker;
-import bank_services.ClientService;
+import bl.bank_services.Banker;
+import bl.bank_services.ClientService;
 
 public class Branch{
 

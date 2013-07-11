@@ -1,4 +1,4 @@
-package main;
+package bl.main;
 
 public class MainProgram {
 	

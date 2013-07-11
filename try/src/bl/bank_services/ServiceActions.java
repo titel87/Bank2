@@ -1,4 +1,4 @@
-package bank_services;
+package bl.bank_services;
 
 public interface ServiceActions {
 

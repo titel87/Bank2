@@ -1,11 +1,14 @@
-package main;
+package bl.main;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Vector;
 import java.util.logging.Logger;
-import bank_services.Atm;
-import bank_services.Banker;
-import bank_services.ClientService;
+
+import listeners.BLEventsListener;
+import bl.bank_services.Atm;
+import bl.bank_services.Banker;
+import bl.bank_services.ClientService;
 
 
 public class BankManager {
@@ -24,6 +27,8 @@ public class BankManager {
 	public static Atm atms[];
 	public static Client clients[];
 	public static boolean isWorking = true;
+	
+	private Vector<BLEventsListener> listeners = new Vector<>();
 	
 
 	public void main() 
@@ -235,6 +240,56 @@ public class BankManager {
 		//print bank report
 		printReport(XmlHandler.readTxtfile(bankName), bankName);
 		
+	}
+
+	public void addCustomerToSystem(String name) throws SecurityException, IOException {
+		
+		int id=1; //TEMPORARY
+		Client temp = new Client(id, name, 0, null, null);
+		clients[clients.length+1] = temp;
+		fireAddCustomerToSystem(temp);
+		System.out.println(name);
+		// TODO save to db
+	}
+
+	public void addATMToSystem(String location) throws SecurityException, IOException {
+		int id=1; //TEMPORARY
+		Atm temp = new Atm(location, id);
+		atms[atms.length+1] = temp;
+		fireAddATMToSystem(temp);
+		// TODO save to db
+		
+	}
+
+	public void addBankerToSystem(String name, double commission) throws SecurityException, IOException {
+		int id=1; //TEMPORARY
+		Banker tempBankers[] = branch.getBankers();
+		Banker temp = new Banker(id, name, commission);
+		tempBankers[tempBankers.length+1] = temp;
+		fireAddBankerToSystem(temp);
+		
+		// TODO save to db
+		
+	}
+	
+	public void registerListener(BLEventsListener listener) {
+		listeners.add(listener);
+	}
+	
+	private void fireAddCustomerToSystem(Client client) {
+		for (BLEventsListener l : listeners) {
+			l.customerAddedToBLEvent(client.getName());
+		}
+	}
+	private void fireAddATMToSystem(Atm atm) {
+		for (BLEventsListener l : listeners) {
+			l.customerAddedToBLEvent(atm.getName());
+		}
+	}
+	private void fireAddBankerToSystem(Banker banker) {
+		for (BLEventsListener l : listeners) {
+			l.customerAddedToBLEvent(banker.getName());
+		}
 	}
 	
 	
