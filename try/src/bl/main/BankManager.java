@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import dal.DBWriter;
+
 import listeners.BLEventsListener;
 import bl.bank_services.Atm;
 import bl.bank_services.Banker;
@@ -28,6 +30,7 @@ public class BankManager {
 	public static Client clients[];
 	public static boolean isWorking = true;
 	
+	private DBWriter dbWriter = new DBWriter();
 	private Vector<BLEventsListener> listeners = new Vector<>();
 	
 
@@ -257,7 +260,8 @@ public class BankManager {
 		Atm temp = new Atm(location, id);
 		atms[atms.length+1] = temp;
 		fireAddATMToSystem(temp);
-		// TODO save to db
+		// save to db
+		dbWriter.writeNewAtm(temp);
 		
 	}
 
@@ -267,8 +271,8 @@ public class BankManager {
 		Banker temp = new Banker(id, name, commission);
 		tempBankers[tempBankers.length+1] = temp;
 		fireAddBankerToSystem(temp);
-		
-		// TODO save to db
+		//  save to db
+		dbWriter.writeNewBanker(temp);
 		
 	}
 	
