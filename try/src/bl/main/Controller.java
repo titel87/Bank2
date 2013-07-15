@@ -2,7 +2,11 @@ package bl.main;
 
 import java.io.IOException;
 
+import bl.bank_services.ClientService;
+import bl.bank_services.ServiceActions;
+
 import ui.ApplicationBase;
+import utils.BankActions;
 
 import javafx.application.Application;
 import listeners.BLEventsListener;
@@ -37,56 +41,54 @@ public class Controller implements BLEventsListener, UIEventsListener{
 	@Override
 	public void ATMAddedToUIEvent(String location) {
 		// user added atm to UI --> now notify BL to add this atm
-			try {
-				bankModel.addATMToSystem(location);
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		try {
+			bankModel.addATMToSystem(location);
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
 	@Override
 	public void bankerAddedToUIEvent(String name, double commission) {
 		// user added banker to UI --> now notify BL to add this banker
-					try {
-						bankModel.addBankerToSystem(name, commission);
-					} catch (SecurityException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+		try {
+			bankModel.addBankerToSystem(name, commission);
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
 	@Override
-	public void depositInUIEvent(int customerId, double amount) {
-		// TODO Auto-generated method stub
-		
+	public void depositInUIEvent(int customerId, double amount,ClientService serviceGiver) {
+		bankModel.makeAction(BankActions.Deposit,customerId,serviceGiver, amount);
 	}
 
 	@Override
-	public void withdrawInUIEvent(int customerId, double amount) {
-		// TODO Auto-generated method stub
-		
+	public void withdrawInUIEvent(int customerId, double amount,ClientService serviceGiver) {
+		bankModel.makeAction(BankActions.Withdraw,customerId,serviceGiver, amount);
 	}
 
 	@Override
-	public void authorizationInUIEvent(int customerId, double amount) {
-		// TODO Auto-generated method stub
+	public void authorizationInUIEvent(int customerId, String organization,ClientService serviceGiver) {
+		bankModel.makeAuthorizationAction(BankActions.Authorization,customerId,serviceGiver, organization);
 		
 	}
 
 	@Override
 	public void bankChargeInUIEvent(int customerId, double amount) {
-		// TODO Auto-generated method stub
+		bankModel.makeAction(BankActions.BankCharge,customerId,null, amount);
 		
 	}
 
 	@Override
 	public void bankCreditInUIEvent(int customerId, double amount) {
-		// TODO Auto-generated method stub
+		bankModel.makeAction(BankActions.BankCredit,customerId,null, amount);
 		
 	}
 

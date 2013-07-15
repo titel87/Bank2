@@ -2,8 +2,12 @@ package bl.main;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
+
+import utils.BankActions;
 
 import dal.DBWriter;
 
@@ -11,6 +15,7 @@ import listeners.BLEventsListener;
 import bl.bank_services.Atm;
 import bl.bank_services.Banker;
 import bl.bank_services.ClientService;
+import bl.bank_services.ServiceActions;
 
 
 public class BankManager {
@@ -249,7 +254,8 @@ public class BankManager {
 		
 		int id=1; //TEMPORARY
 		Client temp = new Client(id, name, 0, null, null);
-		clients[clients.length+1] = temp;
+		List<Client> clientsList = Arrays.asList(clients);
+		clientsList.add(temp);
 		fireAddCustomerToSystem(temp);
 		System.out.println(name);
 		// TODO save to db
@@ -258,7 +264,8 @@ public class BankManager {
 	public void addATMToSystem(String location) throws SecurityException, IOException {
 		int id=1; //TEMPORARY
 		Atm temp = new Atm(location, id);
-		atms[atms.length+1] = temp;
+		List<Atm> atmsList = Arrays.asList(atms);
+		atmsList.add(temp);
 		fireAddATMToSystem(temp);
 		// save to db
 		dbWriter.writeNewAtm(temp);
@@ -269,7 +276,8 @@ public class BankManager {
 		int id=1; //TEMPORARY
 		Banker tempBankers[] = branch.getBankers();
 		Banker temp = new Banker(id, name, commission);
-		tempBankers[tempBankers.length+1] = temp;
+		List<Banker> bankersList = Arrays.asList(tempBankers);
+		bankersList.add(temp);
 		fireAddBankerToSystem(temp);
 		//  save to db
 		dbWriter.writeNewBanker(temp);
@@ -294,6 +302,49 @@ public class BankManager {
 		for (BLEventsListener l : listeners) {
 			l.customerAddedToBLEvent(banker.getName());
 		}
+	}
+
+	public void makeAction(BankActions action, int customerId, ClientService serviceGiver, double amount) {
+		//register client to service giver
+		if(serviceGiver instanceof Banker){
+			Banker bankers[] = branch.getBankers();
+			registerClient(bankers[(int) ((Banker) serviceGiver).getId()], clients[customerId]);
+		}
+		else if(serviceGiver instanceof Atm){
+			int atmId = (int)serviceGiver.getId();
+			registerClient(atms[atmId],clients[customerId]);
+		}
+		
+		switch(action){
+		case Deposit:
+			serviceGiver.cashDeposit(amount);
+			break;
+		case Withdraw:
+			serviceGiver.cashWithdraw(amount);
+			break;
+		case BankCharge:
+			clients[customerId].setBalance(clients[customerId].getBalance()-amount);
+			break;
+		case BankCredit:
+			clients[customerId].setBalance(clients[customerId].getBalance()+amount);
+			break;
+		
+		}
+		
+	}
+
+	public void makeAuthorizationAction(BankActions authorization,
+			int customerId, ClientService serviceGiver, String organization) {
+		//register client to service giver
+		if(serviceGiver instanceof Banker){
+			Banker bankers[] = branch.getBankers();
+			registerClient(bankers[(int) ((Banker) serviceGiver).getId()], clients[customerId]);
+		}
+		else if(serviceGiver instanceof Atm){
+			int atmId = (int)serviceGiver.getId();
+			registerClient(atms[atmId],clients[customerId]);
+		}
+		serviceGiver.addAuthorization(organization);
 	}
 	
 	
