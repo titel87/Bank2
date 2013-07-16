@@ -20,6 +20,10 @@ import bl.bank_services.ServiceActions;
 
 public class BankManager {
 
+	public static Atm[] getAtms() {
+		return atms;
+	}
+
 	public static Logger logger = Logger.getLogger("logger");
 	
 	public static final int ATM = 0;

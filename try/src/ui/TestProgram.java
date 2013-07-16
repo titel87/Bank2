@@ -26,7 +26,7 @@ public class TestProgram extends Application {
 		
 		
         try {
-			app.start(anotherStage);
+			app.start(anotherStage, model.getClients(), model.getAtms());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

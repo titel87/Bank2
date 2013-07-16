@@ -24,7 +24,34 @@ public class DBWriter {
 	}
 	
 	public void writeNewClient(Client client){
-		
+		if(client != null){
+			clients.add(client);
+			//write to db
+			try {
+				openConnection();
+
+				Statement statment = connection.createStatement();
+				//create sql query string
+				String s = "INSERT INTO `bank_db`.`customers` (`name`,`balance`) VALUES ('"
+						+ client.getName() + "','0')";
+				//execute the query
+				int numOfAffectedRows = statment.executeUpdate(s);
+				//for debug:
+				System.out.println("numOfAffectedRows=" + numOfAffectedRows);
+				
+			} catch (InstantiationException  e) {e.printStackTrace();
+			} catch (IllegalAccessException e)  {e.printStackTrace();
+			} catch (ClassNotFoundException e)  {e.printStackTrace();
+			} catch (SQLException e)            {e.printStackTrace();
+			} finally {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}
 	}
 	
 	public void writeNewAtm(Atm atm){

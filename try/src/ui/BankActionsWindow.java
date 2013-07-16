@@ -9,32 +9,38 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import listeners.BLEventsListener;
 import listeners.UIEventsListener;
 
-public class MainWindow extends Application implements ApplicationBase{
+public class BankActionsWindow extends Application implements ApplicationBase{
 	
 	private Vector<UIEventsListener> listeners;	
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
+		startView(primaryStage, "", "", "");
+	}
+	public void start(Stage primaryStage, String clientName, String bankerName, String ATMName) throws Exception {
+		startView(primaryStage, clientName, bankerName, ATMName);
+	}
+	public void startView(Stage primaryStage, String clientName, String bankerName, String ATMName){
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
 		grid.setVgap(10);
-		
-		Text welcomText = new Text("Welcome to the Bank System!");
-		welcomText.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		grid.add(welcomText, 0, 0, 3, 1);
-		Text commandText = new Text("What would you like to do?");
+
+		Text commandText;
+		if(!bankerName.isEmpty()){
+			commandText = new Text("Bank Actions for Client: " + clientName + " | Banker: " + bankerName);
+		}
+		else{
+			commandText = new Text("Bank Actions for Client: " + clientName + " | ATM: " + ATMName);
+		}
 		commandText.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		grid.add(commandText, 0, 1, 3, 1);
+		grid.add(commandText, 0, 0, 3, 1);
 		
 		Button depositBtn = new Button();
         depositBtn.setText("Deposit");
@@ -92,7 +98,6 @@ public class MainWindow extends Application implements ApplicationBase{
         primaryStage.setScene(scene);
         primaryStage.show();
 	}
-	
 	public static void main(String[] args) {
         launch(args);
     }
