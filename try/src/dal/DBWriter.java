@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.Driver;
+
 import bl.bank_services.*;
 import bl.main.Client;
 
@@ -33,7 +35,7 @@ public class DBWriter {
 				Statement statment = connection.createStatement();
 				//create sql query string
 				String s = "INSERT INTO `bank_db`.`customers` (`name`,`balance`) VALUES ('"
-						+ client.getName() + "','0')";
+						+ client.getClientName() + "','0')";
 				//execute the query
 				int numOfAffectedRows = statment.executeUpdate(s);
 				//for debug:
@@ -63,7 +65,7 @@ public class DBWriter {
 
 				Statement statment = connection.createStatement();
 				//create sql query string
-				String s = "INSERT INTO `bank_db`.`bankers` (`location`) VALUES ('"
+				String s = "INSERT INTO `bank_db`.`atms` (`location`) VALUES ('"
 						+ atm.getLocation() + "')";
 				//execute the query
 				int numOfAffectedRows = statment.executeUpdate(s);
@@ -95,8 +97,8 @@ public class DBWriter {
 
 				Statement statment = connection.createStatement();
 				//create sql query string
-				String s = "INSERT INTO `bank_db`.`bankers` (`name`) VALUES ('"
-						+ banker.getName() + "')";
+				String s = "INSERT INTO `bank_db`.`bankers` (`name`,`commission`) VALUES ('"
+						+ banker.getName() + "','"+ banker.getCommission() + "')";
 				//execute the query
 				int numOfAffectedRows = statment.executeUpdate(s);
 				//for debug:
@@ -118,7 +120,13 @@ public class DBWriter {
 	}
 	
 	private void openConnection() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException{
-		Class.forName("com.mysql.jdbc.Driver").newInstance();
+		try{
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		}
+		catch(Exception e){
+			Driver driver = new com.mysql.jdbc.Driver();
+			DriverManager.registerDriver(driver);
+		}
 		String dbUrl = "jdbc:mysql://localhost/bank_db";
 		connection = DriverManager.getConnection(dbUrl, "root", "");
 		

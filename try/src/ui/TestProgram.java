@@ -19,14 +19,16 @@ public class TestProgram extends Application {
 		BankManager model = new BankManager();
 		//model.main();
 		model.initComponentes();
+		//TODO write all data from xml to db 
 		ServiceAndCustomerWindow app = new ServiceAndCustomerWindow();
         Stage anotherStage = new Stage();
 		
 		Controller controller1 = new Controller(model, app);
 		
-		
         try {
-			app.start(anotherStage, model.getClients(), model.getAtms());
+        	//TODO read from db clients,atms & bankers
+        	//and then call initComponents(clients,atms & bankers)
+			app.start(anotherStage, model.getClients(), model.getAtms(), model.branch.getBankers());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

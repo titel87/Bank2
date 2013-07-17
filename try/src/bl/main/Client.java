@@ -22,7 +22,7 @@ public class Client extends Thread implements ServiceActions{
 	public static boolean isAlive = true;
 	
 	private boolean inProcess = false;  
-	private String name;
+	private String cname;
 	private String bankName;
 	private int id;
 	private int counter = 0;
@@ -66,7 +66,7 @@ public class Client extends Thread implements ServiceActions{
 	@Override
 	public void getReport() {
 		
-		BankManager.printReport(XmlHandler.readTxtfile(logHandler.getFileName()), name);
+		BankManager.printReport(XmlHandler.readTxtfile(logHandler.getFileName()), cname);
 	}
 
 	@Override
@@ -239,11 +239,11 @@ public class Client extends Thread implements ServiceActions{
 	
 	//Getters & Setters
 	public String getClientName() {
-		return name;
+		return cname;
 	}
 
 	public void setClientName(String name) {
-		this.name = name;
+		this.cname = name;
 	}
 
 	public int getClientId() {

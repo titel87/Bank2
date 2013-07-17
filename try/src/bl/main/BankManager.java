@@ -2,6 +2,7 @@ package bl.main;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -258,19 +259,19 @@ public class BankManager {
 		
 		int id=1; //TEMPORARY
 		Client temp = new Client(id, name, 0, null, null);
-		List<Client> clientsList = Arrays.asList(clients);
+		List<Client> clientsList = new ArrayList<Client>(Arrays.asList(clients));
 		clientsList.add(temp);
-		fireAddCustomerToSystem(temp);
+		//fireAddCustomerToSystem(temp);
 		System.out.println(name);
-		// TODO save to db
+		dbWriter.writeNewClient(temp);
 	}
 
 	public void addATMToSystem(String location) throws SecurityException, IOException {
 		int id=1; //TEMPORARY
 		Atm temp = new Atm(location, id);
-		List<Atm> atmsList = Arrays.asList(atms);
+		List<Atm> atmsList = new ArrayList<Atm>(Arrays.asList(atms));
 		atmsList.add(temp);
-		fireAddATMToSystem(temp);
+		//fireAddATMToSystem(temp);
 		// save to db
 		dbWriter.writeNewAtm(temp);
 		
@@ -280,9 +281,9 @@ public class BankManager {
 		int id=1; //TEMPORARY
 		Banker tempBankers[] = branch.getBankers();
 		Banker temp = new Banker(id, name, commission);
-		List<Banker> bankersList = Arrays.asList(tempBankers);
+		List<Banker> bankersList = new ArrayList<Banker>(Arrays.asList(tempBankers));
 		bankersList.add(temp);
-		fireAddBankerToSystem(temp);
+		//fireAddBankerToSystem(temp);
 		//  save to db
 		dbWriter.writeNewBanker(temp);
 		

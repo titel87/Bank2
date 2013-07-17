@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import bl.bank_services.Atm;
+import bl.bank_services.Banker;
 import bl.main.Client;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -32,35 +33,43 @@ public class ServiceAndCustomerWindow extends Application implements Application
 	private ListView<String> customersList = new ListView<String>();
 	ListView<String> ATMsList = new ListView<String>();
 	ListView<String> bankersList = new ListView<String>();
-	private ObservableList<String> items = FXCollections.observableArrayList("tamar", "shani", "keren", "chen", "igor");
 	private boolean isBankerSelected = false;
 	private boolean isATMSelected = false;
 	private boolean isClientSelected = false;
 	private boolean isNext = false;
-
+	private ObservableList<String> clientsItemsList;
+	private ObservableList<String> bankersItemsList;
+	private ObservableList<String> atmsItemsList;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		startView(primaryStage, null, null);
+		startView(primaryStage, null, null, null);
 	}
-	public void start(Stage primaryStage, Client clients[], Atm[] atms) throws Exception {
-		startView(primaryStage, clients, atms);
+	public void start(Stage primaryStage, Client clients[], Atm[] atms, Banker[] bankers) throws Exception {
+		startView(primaryStage, clients, atms, bankers);
 	}
 	public ObservableList<String> clientsToObservableList(Client clients[]){
 		final ObservableList<String> listItems = FXCollections.observableArrayList();
 		for(Client c : clients){
-			listItems.add(c.getName());
+			listItems.add(c.getClientName());
 		}
 		return listItems;
 	}
 	public ObservableList<String> ATMsToObservableList(Atm[] atms){
 		final ObservableList<String> listItems = FXCollections.observableArrayList();
 		for(Atm a : atms){
-			listItems.add(a.getName());
+			listItems.add(a.getLocation());
 		}
 		return listItems;
 	}
-	public void startView(Stage primaryStage, Client clients[], Atm[] atms){
+	public ObservableList<String> bankersToObservableList(Banker[] bankers){
+		final ObservableList<String> listItems = FXCollections.observableArrayList();
+		for(Banker b : bankers){
+			listItems.add(b.getBankerName());
+		}
+		return listItems;
+	}
+	public void startView(Stage primaryStage, Client clients[], Atm[] atms, Banker[] bankers){
 		//build grid
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.TOP_CENTER);
@@ -80,35 +89,37 @@ public class ServiceAndCustomerWindow extends Application implements Application
 		customersLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 18));
 		
 		//create lists
-		ATMsList.setItems(ATMsToObservableList(atms));
+		atmsItemsList = ATMsToObservableList(atms);
+		ATMsList.setItems(atmsItemsList);
 		ATMsList.setPrefHeight(200);
 		ATMsList.setPrefWidth(100);
-		bankersList.setItems(items);
+		bankersItemsList = bankersToObservableList(bankers);
+		bankersList.setItems(bankersItemsList);
 		bankersList.setPrefHeight(200);
 		bankersList.setPrefWidth(100);
-		//ListView<String> customersList = new ListView<String>();
-		customersList.setItems(clientsToObservableList(clients));
+		clientsItemsList = clientsToObservableList(clients);
+		customersList.setItems(clientsItemsList);
 		customersList.setPrefHeight(200);
 		customersList.setPrefWidth(100);
 		//-----add selection listeners in listView
 		customersList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 		    public void changed(ObservableValue observable, String oldValue, String newValue) {
-		       System.out.println("value changed from " + oldValue + " to " + newValue);
-		       isClientSelected = true;
+		       //System.out.println("value changed from " + oldValue + " to " + newValue);
+	    	   isClientSelected = true;
 		    }
 		});
 		bankersList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 		    public void changed(ObservableValue observable, String oldValue, String newValue) {
-		       System.out.println("value changed from " + oldValue + " to " + newValue);
+		       //System.out.println("value changed from " + oldValue + " to " + newValue);
 		       isBankerSelected = true;
 		    }
 		});
 		ATMsList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override
 		    public void changed(ObservableValue observable, String oldValue, String newValue) {
-		       System.out.println("value changed from " + oldValue + " to " + newValue);
+		       //System.out.println("value changed from " + oldValue + " to " + newValue);
 		       isATMSelected = true;
 		    }
 		});
@@ -179,7 +190,7 @@ public class ServiceAndCustomerWindow extends Application implements Application
         ATMDoneBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(!nameTextField.getText().isEmpty()){
+                if(!locationTextField.getText().isEmpty()){
                 	addATMToUI(locationTextField.getText());
                 }
             }
@@ -203,7 +214,7 @@ public class ServiceAndCustomerWindow extends Application implements Application
         bankerDoneBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(!nameTextField.getText().isEmpty()){
+                if(!bankerNameTextField.getText().isEmpty()){
                 	addBankerToUI(bankerNameTextField.getText(), Double.valueOf(commissionTextField.getText().trim()).doubleValue());
                 }
             }            
@@ -300,6 +311,19 @@ public class ServiceAndCustomerWindow extends Application implements Application
                 }
             }
         });
+        Button UnselectBtn = new Button();
+        UnselectBtn.setText("Clear All");
+        UnselectBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+        		customersList.getSelectionModel().clearSelection();
+        		bankersList.getSelectionModel().clearSelection();
+        		ATMsList.getSelectionModel().clearSelection();
+        		isClientSelected = false;
+        		isATMSelected = false;
+        		isBankerSelected = false;
+            }
+        });
 		
 		//add header labels to grid
         grid.add(headerLabel1, 0, 1);
@@ -323,7 +347,8 @@ public class ServiceAndCustomerWindow extends Application implements Application
 		grid.add(clientCancelBtn, 2, 8);
 		grid.add(bankerCancelBtn, 1, 9);
 		grid.add(ATMCancelBtn, 0, 8);
-		grid.add(NextBtn, 2, 9);
+		grid.add(NextBtn, 2, 11);
+		grid.add(UnselectBtn, 2, 12);
 		
 		//add Hboxes to grid
 		grid.add(nameBox, 2,6);
@@ -349,18 +374,35 @@ public class ServiceAndCustomerWindow extends Application implements Application
 	}
 	@Override
 	public void addCustomerToUI(String name) {
-		items.add(name);
-		fireAddCustomerToUI(name);	
+		try{
+			fireAddCustomerToUI(name);
+			clientsItemsList.add(name);
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
 		
 	}
 	@Override
 	public void addATMToUI(String location) {
-		// TODO Auto-generated method stub
+		try{
+			fireAddAtmToUI(location);
+			atmsItemsList.add(location);
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
 		
 	}
 	@Override
 	public void addBankerToUI(String name, double commission) {
-		// TODO Auto-generated method stub
+		try{
+			fireAddBankerToUI(name, commission);
+			bankersItemsList.add(name);
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
 		
 	}
 	@Override
@@ -373,6 +415,18 @@ public class ServiceAndCustomerWindow extends Application implements Application
 	private void fireAddCustomerToUI(String name) {
 		for (UIEventsListener l : listeners) {
 			l.customerAddedToUIEvent(name);
+		}
+	}
+	
+	private void fireAddAtmToUI(String location) {
+		for (UIEventsListener l : listeners) {
+			l.ATMAddedToUIEvent(location);
+		}
+	}
+	
+	private void fireAddBankerToUI(String name, double commission) {
+		for (UIEventsListener l : listeners) {
+			l.bankerAddedToUIEvent(name,commission);
 		}
 	}
 }
