@@ -2,6 +2,13 @@ package ui;
 
 import java.util.Vector;
 
+import utils.BankActions;
+
+import bl.bank_services.Atm;
+import bl.bank_services.Banker;
+import bl.bank_services.ClientService;
+import bl.main.Client;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,37 +24,42 @@ import listeners.UIEventsListener;
 
 public class BankActionsWindow extends Application implements ApplicationBase{
 	
-	private Vector<UIEventsListener> listeners;	
+	private Vector<UIEventsListener> listeners;
+	private BankActions chosenAction;
+	private Atm atms[];
+	private Banker bankers[];
+	private Client clients[];
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		startView(primaryStage, "", "", "");
+		startView(primaryStage, null, null, null);
 	}
-	public void start(Stage primaryStage, String clientName, String bankerName, String ATMName) throws Exception {
-		startView(primaryStage, clientName, bankerName, ATMName);
+	public void start(Stage primaryStage, Client clients[], Atm[] atms, Banker[] bankers) throws Exception {
+		startView(primaryStage, clients, atms, bankers);
 	}
-	public void startView(Stage primaryStage, String clientName, String bankerName, String ATMName){
+	public void startView(Stage primaryStage, final Client clients[], final Atm[] atms, final Banker[] bankers){
+		this.atms = atms;
+		this.bankers = bankers;
+		this.clients = clients;		
+		
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
 		grid.setVgap(10);
-
+		Text welcomeText;
+		welcomeText = new Text("Welcome to the Bank System!");
+		welcomeText.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		grid.add(welcomeText, 0, 0, 3, 1);
 		Text commandText;
-		if(!bankerName.isEmpty()){
-			commandText = new Text("Bank Actions for Client: " + clientName + " | Banker: " + bankerName);
-		}
-		else{
-			commandText = new Text("Bank Actions for Client: " + clientName + " | ATM: " + ATMName);
-		}
-		commandText.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		grid.add(commandText, 0, 0, 3, 1);
-		
+		commandText = new Text("What would you like to do?");
+		commandText.setFont(Font.font("Tahoma", FontWeight.NORMAL, 18));
+		grid.add(commandText, 0, 1, 3, 1);
 		Button depositBtn = new Button();
         depositBtn.setText("Deposit");
         depositBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("DEPOSIT action was chosen by the user!");
+                chosenAction = BankActions.Deposit;
             }
         });
         grid.add(depositBtn,0,4,1,1);
@@ -57,7 +69,7 @@ public class BankActionsWindow extends Application implements ApplicationBase{
 		withdrawBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("WITHDRAW action was chosen by the user!");
+                chosenAction = BankActions.Withdraw;
             }
         });
 		grid.add(withdrawBtn,1,4,1,1);
@@ -67,7 +79,7 @@ public class BankActionsWindow extends Application implements ApplicationBase{
 		giveAuthorizationBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("GIVE AUTHORIZATION action was chosen by the user!");
+                chosenAction = BankActions.Authorization;
             }
         });
 		grid.add(giveAuthorizationBtn,2,4,1,1);
@@ -77,7 +89,7 @@ public class BankActionsWindow extends Application implements ApplicationBase{
 		bankChargeBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("BANK CHARGE action was chosen by the user!");
+                chosenAction = BankActions.BankCharge;
             }
         });
 		grid.add(bankChargeBtn,0,6,1,1);
@@ -87,10 +99,25 @@ public class BankActionsWindow extends Application implements ApplicationBase{
 		bankCreditBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("BANK CREDIT action was chosen by the user!");
+                chosenAction = BankActions.BankCredit;
             }
         });
 		grid.add(bankCreditBtn,1,6,1,1);
+		
+		Button nextBtn = new Button();
+		nextBtn.setText("NEXT ->");
+		nextBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+            public void handle(ActionEvent event) {
+            	ServiceAndCustomerWindow app = new ServiceAndCustomerWindow(); //open next window
+        		try {
+					app.start(new Stage(), chosenAction, clients, atms, bankers);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+            }
+        });
+		grid.add(nextBtn,2,12,1,1);
 		
         Scene scene = new Scene(grid, 600, 400);
         
@@ -101,29 +128,27 @@ public class BankActionsWindow extends Application implements ApplicationBase{
 	public static void main(String[] args) {
         launch(args);
     }
-
-	@Override
-	public void addCustomerToUI(String name) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addATMToUI(String location) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addBankerToUI(String name, double commission) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public void registerListener(UIEventsListener listener) {
-		listeners.add(listener);
-		
+		listeners.add(listener);	
 	}
+
+	@Override
+	public void addCustomerToUI(String name) {}
+	@Override
+	public void addATMToUI(String location) {}
+	@Override
+	public void addBankerToUI(String name, double commission) {}
+	@Override
+	public void depositInUI(int customerId, double amount, ClientService serviceGiver) {}
+	@Override
+	public void whithdrawInUI(int customerId, double amount, ClientService serviceGiver) {}
+	@Override
+	public void addAuthorizationInUI(int customerId, String organization, ClientService serviceGiver) {}
+	@Override
+	public void bankChargeInUI(int customerId, double amount) {}
+	@Override
+	public void bankCreditInUI(int customerId, double amount) {}
 
 }

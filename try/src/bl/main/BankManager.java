@@ -7,16 +7,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
-
 import utils.BankActions;
-
 import dal.DBWriter;
-
 import listeners.BLEventsListener;
 import bl.bank_services.Atm;
 import bl.bank_services.Banker;
 import bl.bank_services.ClientService;
-import bl.bank_services.ServiceActions;
 
 
 public class BankManager {
@@ -37,6 +33,7 @@ public class BankManager {
 
 	public static Branch branch;
 	public static Atm atms[];
+	public static Banker bankers[];
 	public static Client clients[];
 	public static boolean isWorking = true;
 	
@@ -97,7 +94,7 @@ public class BankManager {
 			 	
 			 	case BANKER: {
 			 		
-			 		Banker bankers[] = branch.getBankers();
+			 		bankers = branch.getBankers();
 			 		System.out.println("\nBanker Selected \nWitch Banker?\n");
 					int index = 0;
 					for (Banker Banker : bankers) 
@@ -116,6 +113,14 @@ public class BankManager {
 		
 	}
 	
+	public static Banker[] getBankers() {
+		return bankers;
+	}
+
+	public static void setBankers(Banker[] bankers) {
+		BankManager.bankers = bankers;
+	}
+
 	//function that gets service and client that randomly chosen, register the client to the service if the service is available,
 	//if not - lock the thread and print that the service is busy.
 	public void registerClient(final ClientService tempService, final Client currentClient)

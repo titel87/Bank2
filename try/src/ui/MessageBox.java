@@ -46,7 +46,7 @@ public class MessageBox extends Application{
 		grid.add(txt, 0, 0, 3, 1);
 		
 		//build scene
-		Scene scene = new Scene(grid, 300, 200);
+		Scene scene = new Scene(grid, 450, 200);
         
         primaryStage.setTitle("Message");
         primaryStage.setScene(scene);

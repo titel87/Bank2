@@ -3,12 +3,8 @@ package bl.main;
 import java.io.IOException;
 
 import bl.bank_services.ClientService;
-import bl.bank_services.ServiceActions;
-
 import ui.ApplicationBase;
 import utils.BankActions;
-
-import javafx.application.Application;
 import listeners.BLEventsListener;
 import listeners.UIEventsListener;
 

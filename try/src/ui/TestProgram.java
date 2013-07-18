@@ -20,15 +20,15 @@ public class TestProgram extends Application {
 		//model.main();
 		model.initComponentes();
 		//TODO write all data from xml to db 
-		ServiceAndCustomerWindow app = new ServiceAndCustomerWindow();
-        Stage anotherStage = new Stage();
-		
+		//ServiceAndCustomerWindow app = new ServiceAndCustomerWindow();
+		BankActionsWindow app = new BankActionsWindow();
 		Controller controller1 = new Controller(model, app);
 		
         try {
         	//TODO read from db clients,atms & bankers
         	//and then call initComponents(clients,atms & bankers)
-			app.start(anotherStage, model.getClients(), model.getAtms(), model.branch.getBankers());
+        	app.start(new Stage(), model.getClients(), model.getAtms(), model.getBankers());
+        	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
