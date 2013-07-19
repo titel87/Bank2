@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -86,41 +87,44 @@ public class SpecificActionWindow extends Application implements ApplicationBase
 			final HBox box1 = new HBox();
 			box1.getChildren().addAll(label1, textField1);
 			box1.setSpacing(10);
-			box1.setVisible(false);
-			//-----BOX 2
+			//box1.setVisible(false);
+			
+			//-----BOX 2 -- just in case
 			Label label2 = new Label(); 
 			label2.setFont(Font.font("Tahoma", FontWeight.NORMAL, 12));
 			final TextField textField2 = new TextField ();
 			final HBox box2 = new HBox();
 			box2.getChildren().addAll(label2, textField2);
 			box2.setSpacing(10);
-			box2.setVisible(false);
+			//box2.setVisible(false);
+			
+			
 			//populate labels
 			if(chosenAction == BankActions.Deposit){
 				label1.setText("Amount to deposit:");
-				label1.setVisible(true);
+				//label1.setVisible(true);
 			}
 			else if(chosenAction == BankActions.Withdraw){
 				label1.setText("Amount to withdraw:");
-				label1.setVisible(true);
+				//label1.setVisible(true);
 			}
 			else if(chosenAction == BankActions.Authorization){
 				label1.setText("Name to authorize:");
-				label1.setVisible(true);
+				//label1.setVisible(true);
 			}
 			else if(chosenAction == BankActions.BankCharge){
 				label1.setText("Amount to charge:");
-				label1.setVisible(true);
+				//label1.setVisible(true);
 			}
 			else if(chosenAction == BankActions.BankCredit){
 				label1.setText("Amount to credit:");
-				label1.setVisible(true);
+				//label1.setVisible(true);
 			}
 			
 			//create buttons
 			final Button doneBtn = new Button(); //---adding Client DONE
 	        doneBtn.setText("Done");
-	        doneBtn.setVisible(false);
+	        //doneBtn.setVisible(false);
 	        doneBtn.setOnAction(new EventHandler<ActionEvent>() {        		
 	            @Override
 	            public void handle(ActionEvent event) {
@@ -148,6 +152,14 @@ public class SpecificActionWindow extends Application implements ApplicationBase
 	        grid.add(commandText, 0, 0);
 	        grid.add(box1, 0, 3);
 	        grid.add(doneBtn, 0, 4);
+	        
+	        
+	      //build scene
+			Scene scene = new Scene(grid, 800, 600);
+	        
+	        primaryStage.setTitle("Action details");
+	        primaryStage.setScene(scene);
+	        primaryStage.show();
 		}
 		else{
 			MessageBox msgbox = new MessageBox();

@@ -29,7 +29,7 @@ import listeners.UIEventsListener;
 
 public class ServiceAndCustomerWindow extends Application implements ApplicationBase{
 
-	private Vector<UIEventsListener> listeners  = new Vector<>();;
+	private Vector<UIEventsListener> listeners  = new Vector<>();
 	private ListView<String> customersList = new ListView<String>();
 	ListView<String> ATMsList = new ListView<String>();
 	ListView<String> bankersList = new ListView<String>();
@@ -39,6 +39,7 @@ public class ServiceAndCustomerWindow extends Application implements Application
 	private ObservableList<String> clientsItemsList;
 	private ObservableList<String> bankersItemsList;
 	private ObservableList<String> atmsItemsList;
+	public final String EMPTY_STRING = "";
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -284,19 +285,22 @@ public class ServiceAndCustomerWindow extends Application implements Application
 	                }
 	                else if(isClientSelected == true){
 	                	if(isBankerSelected == true){
-	                        BankActionsWindow bankeActions = new BankActionsWindow();
+	                        //BankActionsWindow bankeActions = new BankActionsWindow();
 	                        try {
 								SpecificActionWindow actionApp = new SpecificActionWindow();
-								actionApp.start(new Stage(), chosenAction, customersList.getSelectionModel().getSelectedItem(), ATMsList.getSelectionModel().getSelectedItem(), bankersList.getSelectionModel().getSelectedItem());
+								actionApp.start(new Stage(), chosenAction, customersList.getSelectionModel().getSelectedItem(), 
+										EMPTY_STRING, bankersList.getSelectionModel().getSelectedItem());
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
 	                		
 	                	}
 	                	else if(isATMSelected == true){
-	                		BankActionsWindow bankeActions = new BankActionsWindow();
 	                        try {
 	                        	//open small action window
+	                        	SpecificActionWindow actionApp = new SpecificActionWindow();
+								actionApp.start(new Stage(), chosenAction, customersList.getSelectionModel().getSelectedItem(), 
+										ATMsList.getSelectionModel().getSelectedItem(),EMPTY_STRING);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -384,7 +388,6 @@ public class ServiceAndCustomerWindow extends Application implements Application
         app2.start(anotherStage);
     }
 	public static void main(String[] args) {
-
 		launch(args);
 	}
 
@@ -422,9 +425,7 @@ public class ServiceAndCustomerWindow extends Application implements Application
 	}
 
 	public void registerListener(UIEventsListener listener) {
-
 		listeners.add(listener);
-		
 	}
 	
 	private void fireAddCustomerToUI(String name) {
@@ -447,24 +448,19 @@ public class ServiceAndCustomerWindow extends Application implements Application
 	@Override
 	public void depositInUI(int customerId, double amount,
 			ClientService serviceGiver) { 
-		
 	}
 	@Override
 	public void whithdrawInUI(int customerId, double amount,
 			ClientService serviceGiver) {
-		
 	}
 	@Override
 	public void addAuthorizationInUI(int customerId, String organization,
 			ClientService serviceGiver) {
-		
 	}
 	@Override
 	public void bankChargeInUI(int customerId, double amount) {
-		
 	}
 	@Override
 	public void bankCreditInUI(int customerId, double amount) {
-		
 	}
 }

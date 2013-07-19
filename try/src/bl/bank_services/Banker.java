@@ -9,13 +9,13 @@ import org.w3c.dom.NodeList;
 
 public class Banker extends ClientService implements ServiceActions {
 
-	String name;
+	String bankerName;
 	double commission;
 
 	//Constructor
 	public Banker(int id, String name, double commission) throws SecurityException, IOException{
 		super(id);
-		setName(name);
+		setBankerName(name);
 		this.commission = commission;
 	}
 
@@ -85,11 +85,11 @@ public class Banker extends ClientService implements ServiceActions {
 	
 	//Getters & Setters
 	public void setBankerName(String name) {
-		this.name = name;
+		this.bankerName = name;
 	}
 
 	public String getBankerName() {
-		return name;
+		return bankerName;
 	}
 	
 	public void setCommission(double commission) {

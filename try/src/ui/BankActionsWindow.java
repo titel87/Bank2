@@ -24,7 +24,7 @@ import listeners.UIEventsListener;
 
 public class BankActionsWindow extends Application implements ApplicationBase{
 	
-	private Vector<UIEventsListener> listeners;
+	private Vector<UIEventsListener> listeners = new Vector<>();;
 	private BankActions chosenAction;
 	private Atm atms[];
 	private Banker bankers[];
@@ -42,19 +42,24 @@ public class BankActionsWindow extends Application implements ApplicationBase{
 		this.bankers = bankers;
 		this.clients = clients;		
 		
+		//grid defenitions
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
 		grid.setVgap(10);
+		
+		//text labels
 		Text welcomeText;
 		welcomeText = new Text("Welcome to the Bank System!");
 		welcomeText.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		grid.add(welcomeText, 0, 0, 3, 1);
 		Text commandText;
 		commandText = new Text("What would you like to do?");
 		commandText.setFont(Font.font("Tahoma", FontWeight.NORMAL, 18));
-		grid.add(commandText, 0, 1, 3, 1);
-		Button depositBtn = new Button();
+		
+		
+		
+		//buttons
+		Button depositBtn = new Button(); //---DEPOSIT btn
         depositBtn.setText("Deposit");
         depositBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -62,9 +67,7 @@ public class BankActionsWindow extends Application implements ApplicationBase{
                 chosenAction = BankActions.Deposit;
             }
         });
-        grid.add(depositBtn,0,4,1,1);
-        
-		Button withdrawBtn = new Button();
+		Button withdrawBtn = new Button(); //---WITHDRAW btn
 		withdrawBtn.setText("Withdraw");
 		withdrawBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -72,9 +75,7 @@ public class BankActionsWindow extends Application implements ApplicationBase{
                 chosenAction = BankActions.Withdraw;
             }
         });
-		grid.add(withdrawBtn,1,4,1,1);
-		
-		Button giveAuthorizationBtn = new Button();
+		Button giveAuthorizationBtn = new Button(); //---AUTHORIZATION btn
 		giveAuthorizationBtn.setText("Give Authorization");
 		giveAuthorizationBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -82,9 +83,7 @@ public class BankActionsWindow extends Application implements ApplicationBase{
                 chosenAction = BankActions.Authorization;
             }
         });
-		grid.add(giveAuthorizationBtn,2,4,1,1);
-		
-		Button bankChargeBtn = new Button();
+		Button bankChargeBtn = new Button();//---BANK CHARGE btn
 		bankChargeBtn.setText("Bank Charge");
 		bankChargeBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -92,9 +91,7 @@ public class BankActionsWindow extends Application implements ApplicationBase{
                 chosenAction = BankActions.BankCharge;
             }
         });
-		grid.add(bankChargeBtn,0,6,1,1);
-		
-		Button bankCreditBtn = new Button();
+		Button bankCreditBtn = new Button();//---BANK CREDIT btn
 		bankCreditBtn.setText("Bank Crdeit");
 		bankCreditBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -102,9 +99,7 @@ public class BankActionsWindow extends Application implements ApplicationBase{
                 chosenAction = BankActions.BankCredit;
             }
         });
-		grid.add(bankCreditBtn,1,6,1,1);
-		
-		Button nextBtn = new Button();
+		Button nextBtn = new Button();//---NEXT btn
 		nextBtn.setText("NEXT ->");
 		nextBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -117,9 +112,19 @@ public class BankActionsWindow extends Application implements ApplicationBase{
 				}
             }
         });
+
+		//add text elements to grid
+		grid.add(welcomeText, 0, 0, 3, 1);
+		grid.add(commandText, 0, 1, 3, 1);
+		//add buttons to grid
+		grid.add(depositBtn,0,4,1,1);
+		grid.add(withdrawBtn,1,4,1,1);
+		grid.add(giveAuthorizationBtn,2,4,1,1);
+		grid.add(bankCreditBtn,1,6,1,1);
+		grid.add(bankChargeBtn,0,6,1,1);
 		grid.add(nextBtn,2,12,1,1);
 		
-        Scene scene = new Scene(grid, 600, 400);
+        Scene scene = new Scene(grid, 800, 600);
         
         primaryStage.setTitle("Bank System");
         primaryStage.setScene(scene);

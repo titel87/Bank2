@@ -17,10 +17,6 @@ import bl.bank_services.ClientService;
 
 public class BankManager {
 
-	public static Atm[] getAtms() {
-		return atms;
-	}
-
 	public static Logger logger = Logger.getLogger("logger");
 	
 	public static final int ATM = 0;
@@ -113,14 +109,6 @@ public class BankManager {
 		
 	}
 	
-	public static Banker[] getBankers() {
-		return bankers;
-	}
-
-	public static void setBankers(Banker[] bankers) {
-		BankManager.bankers = bankers;
-	}
-
 	//function that gets service and client that randomly chosen, register the client to the service if the service is available,
 	//if not - lock the thread and print that the service is busy.
 	public void registerClient(final ClientService tempService, final Client currentClient)
@@ -181,6 +169,8 @@ public class BankManager {
 			
 		}
 		
+		bankers = branch.getBankers();
+		
 		clients = branch.getClients();
 		
 		//gets ATMs list from XML
@@ -206,16 +196,6 @@ public class BankManager {
 			 c.setBankName(branch.getName());
 		 }
  
-	}
-
-	public String getClientName(int i) {
-		return clients[i].getClientName();
-	}
-	
-	
-
-	public Client[] getClients() {
-		return clients;
 	}
 
 	//function that gets buffer reader from file and prints his content
@@ -357,5 +337,26 @@ public class BankManager {
 		serviceGiver.addAuthorization(organization);
 	}
 	
+	
+	//getters & setters
+	public String getClientName(int i) {
+		return clients[i].getClientName();
+	}
+
+	public Client[] getClients() {
+		return clients;
+	}
+	
+	public static Atm[] getAtms() {
+		return atms;
+	}
+	
+	public static Banker[] getBankers() {
+		return bankers;
+	}
+
+	public static void setBankers(Banker[] bankers) {
+		BankManager.bankers = bankers;
+	}
 	
 }
